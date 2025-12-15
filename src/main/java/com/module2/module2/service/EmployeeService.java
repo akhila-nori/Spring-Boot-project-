@@ -5,9 +5,14 @@ import com.module2.module2.entities.EmployeeEntity;
 import com.module2.module2.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 //when you annotate it with @Service - so that bean of this class is created --> BEAN IS CREATED
@@ -22,7 +27,10 @@ public class EmployeeService {
 
 
     public EmployeeDTO getEmployeeById(Long employeId) {
-        EmployeeEntity employeeEntity = employeeRepository.findById(employeId).orElse(null);
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeId).orElseThrow(()-> new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "EMPLOYEE NOT FOUND WITH id : " + employeId
+        ));
 
         //how to convery entity returned by repository from database to Employee DTO in postman
         //one way to do that is to return new Employee DTO and inside the new Employee DTO -->> take all things from EmployeeEntity and map it to Employee DTO
@@ -63,5 +71,21 @@ public class EmployeeService {
 
         //use modelMpaper to convert returned entity from database to DTO
         return modelMapper.map(employeeEntity,EmployeeDTO.class);
+    }
+
+    public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
+//        EmployeeEntity employeeEntity = modelMapper.map(updates,EmployeeEntity.class);
+        boolean exists = employeeRepository.existsById(employeeId);
+        if(!exists) return null;
+       EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+
+     //Method 1 : Preferred
+        updates.forEach((field, value) -> {
+            Field fieldToBeUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class,field);
+            fieldToBeUpdated.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeUpdated,employeeEntity,value);
+        });
+       return  modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
+
     }
 }
