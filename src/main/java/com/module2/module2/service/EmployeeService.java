@@ -87,5 +87,17 @@ public class EmployeeService {
         });
        return  modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
 
+//       Method - 2 - for-each old style Map
+//
+//        for(Map.Entry<String,Object> e : updates.entrySet()){
+//            String fieldName = e.getKey();
+//            Object value = e.getValue();
+//
+//            Field fieldToBeUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class,fieldName);
+//            fieldToBeUpdated.setAccessible(true);
+//            ReflectionUtils.setField(fieldToBeUpdated,employeeEntity,value);
+//        }
+//        return  modelMapper.map(employeeRepository.save(employeeEntity),EmployeeDTO.class);
+
     }
 }
