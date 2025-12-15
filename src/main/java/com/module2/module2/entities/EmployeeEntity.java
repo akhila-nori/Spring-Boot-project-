@@ -16,7 +16,7 @@ public class EmployeeEntity {
 
     //we are telling hibernate that id is going to be a primary key by annotating it with @Id annotation
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
