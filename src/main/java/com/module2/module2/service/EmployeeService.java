@@ -47,19 +47,21 @@ public class EmployeeService {
         return employeeEntity.map(employeeEntity1 -> modelMapper.map(employeeEntity1, EmployeeDTO.class ));
     }
 
-    public List<EmployeeDTO> getAllEmployeesService(Integer age, String sortBy) {
+    public Optional<List<EmployeeDTO>> getAllEmployeesService(Integer age, String sortBy) {
 
         //Spring way of doing things, not to create 'new' object ... rather to create a Bean
         //How can we create a Bean of ModelMapper here ? - check MapperConfig there we have created Bean of ModelMpper
 //        ModelMapper mapper = new ModelMapper();
 
 
+        //It returns them as a List of your database-specific objects (EmployeeEntity).
         List<EmployeeEntity> employeeEntities  = employeeRepository.findAll();
 
-        return employeeEntities
+        //This turns your list into a stream so we can process each employee one by one.
+        return Optional.of(employeeEntities
                 .stream()
-                .map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDTO.class))
-                .collect(Collectors.toList());
+                .map(employeeEntity -> modelMapper.map(employeeEntity, EmployeeDTO.class))
+                .collect(Collectors.toList()));
     }
 
     public EmployeeDTO createNewEmployeeService(EmployeeDTO inputEmployee) {

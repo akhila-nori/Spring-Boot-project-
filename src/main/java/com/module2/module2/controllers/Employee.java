@@ -51,9 +51,11 @@ public class Employee {
     }
 
     @GetMapping("/employees")
-    public List<EmployeeDTO> getAllEmployees(@RequestParam(required=false) Integer age, @RequestParam(required=false) String sortBy){
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(required=false) Integer age, @RequestParam(required=false) String sortBy){
 //        return "Hi age is ..."+age + " " +sortBy;
-        return employeeService.getAllEmployeesService(age,sortBy);
+        return employeeService.getAllEmployeesService(age,sortBy).map(r -> ResponseEntity.ok(r)).orElse(ResponseEntity.notFound().build());
+
+
 
     }
 
