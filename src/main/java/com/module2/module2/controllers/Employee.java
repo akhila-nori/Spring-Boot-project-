@@ -4,11 +4,13 @@ import com.module2.module2.dto.EmployeeDTO;
 import com.module2.module2.entities.EmployeeEntity;
 import com.module2.module2.repository.EmployeeRepository;
 import com.module2.module2.service.EmployeeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -36,10 +38,16 @@ public class Employee {
     }
 
     @GetMapping("/employees/{employeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable Long employeId){
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeId){
         //return new EmployeeDTO(employeId,"Akhila","akhila@gamil.com",24, LocalDate.of(2025,1,2),true);
 //        return employeeRepository.findById(employeId).orElse(null);
-        return employeeService.getEmployeeById(employeId);
+
+        //you need to unwrap Optional returned by your Service
+        // your controller expects a direct EmployeeDTO object, but your service is giving it an Optional container that contains the DTO.
+        return employeeService.getEmployeeById(employeId)
+                .map(d -> ResponseEntity.ok(d))
+                .orElse(ResponseEntity.notFound().build());
+
     }
 
     @GetMapping("/employees")

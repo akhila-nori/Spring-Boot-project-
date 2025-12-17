@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 //when you annotate it with @Service - so that bean of this class is created --> BEAN IS CREATED
@@ -26,11 +27,9 @@ public class EmployeeService {
     private final ModelMapper modelMapper;
 
 
-    public EmployeeDTO getEmployeeById(Long employeId) {
-        EmployeeEntity employeeEntity = employeeRepository.findById(employeId).orElseThrow(()-> new ResponseStatusException(
-                HttpStatus.FORBIDDEN,
-                "EMPLOYEE NOT FOUND WITH id : " + employeId
-        ));
+    public Optional<EmployeeDTO> getEmployeeById(Long employeId) {
+        Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(employeId);
+
 
         //how to convery entity returned by repository from database to Employee DTO in postman
         //one way to do that is to return new Employee DTO and inside the new Employee DTO -->> take all things from EmployeeEntity and map it to Employee DTO
@@ -41,8 +40,11 @@ public class EmployeeService {
         //--> it will actually look for all the fields that are common in both of them and it will create an Object of EmployeeDTO using the fields from Entity
 
 //        ModelMapper mapper = new ModelMapper();
-        return modelMapper.map(employeeEntity, EmployeeDTO.class); // what this does is , it returns an EmployeeDTO Object
+//        return modelMapper.map(employeeEntity, EmployeeDTO.class); // what this does is , it returns an EmployeeDTO Object
        //src, destination type --> it will be of type class
+
+
+        return employeeEntity.map(employeeEntity1 -> modelMapper.map(employeeEntity1, EmployeeDTO.class ));
     }
 
     public List<EmployeeDTO> getAllEmployeesService(Integer age, String sortBy) {
