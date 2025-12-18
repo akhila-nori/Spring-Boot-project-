@@ -51,7 +51,9 @@ public class StreamsAndLambda {
         Map<String, Integer> frui = fruits
                 .stream()
 //                .map(f -> f.length())
-                .collect(Collectors.toMap(fr -> fr, fruVal -> fruVal.length() ));
+//                .collect(Collectors.toMap(fr -> fr, fruVal -> fruVal.length() ));  //lambda version
+                  .collect(Collectors.toMap(fr -> fr, String:: length)); //method referencing version
+        //It tells Java: "I have a String here; please just run its .length() method and give me the result."
 
         System.out.println("fruits using collector ..." + frui);
     }
