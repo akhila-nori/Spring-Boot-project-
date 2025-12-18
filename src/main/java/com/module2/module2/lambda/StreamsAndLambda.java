@@ -2,6 +2,7 @@ package com.module2.module2.lambda;
 
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,10 +48,10 @@ public class StreamsAndLambda {
 //    }
 
         //METHOD 3
-        List<Integer> frui = fruits
+        Map<String, Integer> frui = fruits
                 .stream()
-                .map(f -> f.length())
-                .collect(Collectors.toList());
+//                .map(f -> f.length())
+                .collect(Collectors.toMap(fr -> fr, fruVal -> fruVal.length() ));
 
         System.out.println("fruits using collector ..." + frui);
     }
