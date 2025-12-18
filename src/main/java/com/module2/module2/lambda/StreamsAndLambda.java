@@ -3,6 +3,8 @@ package com.module2.module2.lambda;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.hibernate.internal.util.collections.ArrayHelper.forEach;
+
 public class StreamsAndLambda {
     public static void main(String[] args) {
 
@@ -27,9 +29,16 @@ public class StreamsAndLambda {
 
         Stream<String> stream = fruits.stream();
 
-        stream.forEach((f) -> {
-            System.out.println(f);
-        });
+//        stream.forEach((f) -> {
+//            System.out.println(f);
+//        });
+
+        stream
+                .filter(frui -> frui.length() < 5)
+                .sorted()
+                .map(f -> f.length())
+                .map(fruitLegnth -> 2*fruitLegnth)
+                .forEach(fr -> System.out.println(fr));
 
     }
 }
