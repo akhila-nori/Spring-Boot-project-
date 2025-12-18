@@ -26,6 +26,7 @@ interface Walkable {
     int walk(int steps, boolean isEnabled);
 }
 
+//using lambda expression on functional interfaces you avoid defining a permanent named class, instead you define anonymous class
 //class Walkfast implements Walkable {
 //
 //    @Override
