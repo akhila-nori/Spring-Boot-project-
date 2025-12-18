@@ -1,5 +1,8 @@
 package com.module2.module2.lambda;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 public class StreamsAndLambda {
     public static void main(String[] args) {
 
@@ -17,6 +20,16 @@ public class StreamsAndLambda {
         Walkable obj2 = (steps, isEnabled) -> 2*steps; //returning , 1 line of body, avoiding curly braces
 
         obj.walk(4,true);
+
+
+        //convert List<> into Stream and perform stream related operations on this converted stream
+        List<String> fruits = List.of("Apple","Kiwi","Banana");
+
+        Stream<String> stream = fruits.stream();
+
+        stream.forEach((f) -> {
+            System.out.println(f);
+        });
 
     }
 }
