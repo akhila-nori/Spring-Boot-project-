@@ -4,6 +4,7 @@ import com.module2.module2.dto.EmployeeDTO;
 import com.module2.module2.entities.EmployeeEntity;
 import com.module2.module2.repository.EmployeeRepository;
 import com.module2.module2.service.EmployeeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,14 +61,16 @@ public class Employee {
     }
 
     @PostMapping("/employees")
-    public EmployeeDTO createNewEmployee(@RequestBody EmployeeDTO inputEmployee){
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO inputEmployee){
 //        inputEmployee.setId(10L);
-       return employeeService.createNewEmployeeService(inputEmployee);
+       EmployeeDTO savedEmployee = employeeService.createNewEmployeeService(inputEmployee);
+//       return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
     }
 
     @PatchMapping("/employees/{employeeId}")
-    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String, Object> updates, @PathVariable Long employeeId){
-        return employeeService.updatePartialEmployeeById(employeeId,updates);
+    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@RequestBody Map<String, Object> updates, @PathVariable Long employeeId){
+        return ResponseEntity.ok(employeeService.updatePartialEmployeeById(employeeId,updates));
     }
 
 
