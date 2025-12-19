@@ -4,6 +4,7 @@ import com.module2.module2.dto.EmployeeDTO;
 import com.module2.module2.entities.EmployeeEntity;
 import com.module2.module2.repository.EmployeeRepository;
 import com.module2.module2.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,8 +61,9 @@ public class Employee {
 
     }
 
+//@Valid goes recursively inside DTO objects and checks validation annotations applied on fields -
     @PostMapping("/employees")
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeDTO inputEmployee){
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO inputEmployee){  //validating @NotNull applied on employeeDTO
 //        inputEmployee.setId(10L);
        EmployeeDTO savedEmployee = employeeService.createNewEmployeeService(inputEmployee);
 //       return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
