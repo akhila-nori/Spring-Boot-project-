@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class Module2ApplicationTests {
@@ -40,7 +42,16 @@ class Module2ApplicationTests {
     //it starts mock server
     void getRepository() {
         List<ProductEntity> productEntityList = productRepository.findAll();
-        System.out.println(productEntityList);
+        List<ProductEntity> productEntityList1 = productRepository.findByTitle("nestle");
+        List<ProductEntity> productEntityList2 = productRepository.findByCreateAtAfter(LocalDateTime.of(2026,1,1,0,0,0));
+        System.out.println(productEntityList2);
+    }
+
+    @Test
+    void getSingleFromRepository(){
+        Optional<ProductEntity> productEntityOptional = productRepository.findByTitleAndPrice("Nestle Chocoalet",BigDecimal.valueOf(23.45));
+
+        productEntityOptional.ifPresent(System.out::println);
 
 
     }
