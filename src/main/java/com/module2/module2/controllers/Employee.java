@@ -2,9 +2,12 @@ package com.module2.module2.controllers;
 
 import com.module2.module2.dto.EmployeeDTO;
 import com.module2.module2.entities.EmployeeEntity;
+import com.module2.module2.entities.ProductEntity;
 import com.module2.module2.repository.EmployeeRepository;
+import com.module2.module2.repository.ProductRepository;
 import com.module2.module2.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +37,13 @@ public class Employee {
    // So, you are not making the field a bean; you are making the field hold a reference to an already existing bean.
     private final EmployeeService employeeService;
 
+    private final ProductRepository productRepository;
+
     //Bean injection
-    public Employee(EmployeeService employeeService) {
+    public Employee(EmployeeService employeeService, ProductRepository productRepository) {
         this.employeeService = employeeService;
+        this.productRepository = productRepository;
+
     }
 
     @GetMapping("/employees/{employeId}")
@@ -75,6 +82,11 @@ public class Employee {
     @PatchMapping("/employees/{employeeId}")
     public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@RequestBody Map<String, Object> updates, @PathVariable Long employeeId){
         return ResponseEntity.ok(employeeService.updatePartialEmployeeById(employeeId,updates));
+    }
+
+    @GetMapping("/products")
+    public List<ProductEntity> getAllProducts(@RequestParam(defaultValue="id") String sortBy){
+        return productRepository.findBy(Sort.by(sortBy));  //give me all the products but using this I'm not tightly coupled with sorting by a particualr parameter
     }
 
 
