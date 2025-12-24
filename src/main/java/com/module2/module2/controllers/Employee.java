@@ -86,7 +86,7 @@ public class Employee {
 
     @GetMapping("/products")
     public List<ProductEntity> getAllProducts(@RequestParam(defaultValue="id") String sortBy){
-        return productRepository.findBy(Sort.by(sortBy));  //give me all the products but using this I'm not tightly coupled with sorting by a particualr parameter
+        return productRepository.findBy(Sort.by(Sort.Direction.DESC,sortBy));  //give me all the products but using this I'm not tightly coupled with sorting by a particualr parameter
     }
 
 
